@@ -1,0 +1,14 @@
+# Amplify section
+
+# current backend as deployed (presumably used for change detection)
+/amplify/\#current-cloud-backend
+
+# config which is partly portable and partly machine-specific ¯\_(ツ)_/¯
+/amplify/.config
+
+# information about currently used amplify resources
+# (not sure if this should be ignored or not but it changes often)
+/amplify/backend/amplify-meta.json
+
+dist/
+
