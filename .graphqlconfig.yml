@@ -1,5 +1,5 @@
 projects:
-  amplifycli:
+  amplifyexperiments:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -10,7 +10,7 @@ projects:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
-        graphQLApiId: fbtwxcrjdnezxbbpmwu2qex72e
+        graphQLApiId: vy4g4twi55difaruik6jthmohu
       endpoints:
         prod: >-
-          https://g7ipbyx555aglcqnmaoue6lrwe.appsync-api.eu-west-1.amazonaws.com/graphql
+          https://jpawtc67nbcq7nv3id5tzy6t3y.appsync-api.eu-west-1.amazonaws.com/graphql
