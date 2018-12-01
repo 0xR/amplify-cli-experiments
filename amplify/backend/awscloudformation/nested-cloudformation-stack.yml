@@ -81,15 +81,36 @@
 		"hostingS3AndCloudFront": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/amplifyexperiments-20181125131243-deployment/amplify-cfn-templates/hosting/template.json",
-				"Parameters": {}
+				"TemplateURL": "https://s3.amazonaws.com/amplifyexperiments-20181201110103-deployment/amplify-cfn-templates/hosting/template.json",
+				"Parameters": {
+					"bucketName": "amplifyexperiments-20181125131341--hostingbucket",
+					"env": "dev"
+				}
 			}
 		},
 		"authcognito283350e3": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/amplifyexperiments-20181125131243-deployment/amplify-cfn-templates/auth/cognito283350e3-cloudformation-template.yml",
+				"TemplateURL": "https://s3.amazonaws.com/amplifyexperiments-20181201110103-deployment/amplify-cfn-templates/auth/cognito283350e3-cloudformation-template.yml",
 				"Parameters": {
+					"authRoleName": {
+						"Ref": "AuthRoleName"
+					},
+					"unauthRoleName": {
+						"Ref": "UnauthRoleName"
+					},
+					"authRoleArn": {
+						"Fn::GetAtt": [
+							"AuthRole",
+							"Arn"
+						]
+					},
+					"unauthRoleArn": {
+						"Fn::GetAtt": [
+							"UnauthRole",
+							"Arn"
+						]
+					},
 					"identityPoolName": "cognito283350e3_identitypool_283350e3",
 					"allowUnauthenticatedIdentities": false,
 					"thirdPartyAuth": false,
@@ -127,18 +148,17 @@
 					"userpoolClientSetAttributes": false,
 					"useDefault": "default",
 					"unAuthRoleName": "amplifyexperiments-20181125131243-unauthRole",
-					"authRoleName": "amplifyexperiments-20181125131243-authRole",
 					"unAuthRoleArn": "arn:aws:iam::213432432513:role/amplifyexperiments-20181125131243-unauthRole",
-					"authRoleArn": "arn:aws:iam::213432432513:role/amplifyexperiments-20181125131243-authRole",
 					"resourceName": "cognito283350e3",
-					"authSelections": "identityPoolAndUserPool"
+					"authSelections": "identityPoolAndUserPool",
+					"env": "dev"
 				}
 			}
 		},
 		"apiamplifyexperiments": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/amplifyexperiments-20181125131243-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"TemplateURL": "https://s3.amazonaws.com/amplifyexperiments-20181201110103-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"Parameters": {
 					"AppSyncApiName": "amplifyexperiments",
 					"AuthCognitoUserPoolId": {
@@ -147,10 +167,11 @@
 							"Outputs.UserPoolId"
 						]
 					},
-					"schemaGraphql": "s3://amplifyexperiments-20181125131243-deployment/amplify-appsync-files/schema.graphql.1543148418489",
-					"ResolverBucket": "amplifyexperiments-20181125131243-deployment",
+					"schemaGraphql": "s3://amplifyexperiments-20181201110103-deployment/amplify-appsync-files/schema.graphql.1543658945064",
+					"ResolverBucket": "amplifyexperiments-20181201110103-deployment",
 					"ResolverRootKey": "amplify-appsync-files",
-					"DeploymentTimestamp": "1543148418489"
+					"DeploymentTimestamp": "1543658945064",
+					"env": "dev"
 				}
 			}
 		}
