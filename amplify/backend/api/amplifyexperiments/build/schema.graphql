@@ -8,6 +8,7 @@ type Product {
   title: String!
   price: Int!
   description: String!
+  stock: Int!
   attributes: [Attribute!]!
 }
 
@@ -86,6 +87,7 @@ input ModelProductFilterInput {
   title: ModelStringFilterInput
   price: ModelIntFilterInput
   description: ModelStringFilterInput
+  stock: ModelIntFilterInput
   and: [ModelProductFilterInput]
   or: [ModelProductFilterInput]
   not: ModelProductFilterInput
@@ -102,6 +104,7 @@ input CreateProductInput {
   title: String!
   price: Int!
   description: String!
+  stock: Int!
   attributes: [AttributeInput!]!
 }
 
@@ -110,6 +113,7 @@ input UpdateProductInput {
   title: String
   price: Int
   description: String
+  stock: Int
   attributes: [AttributeInput!]
 }
 
@@ -183,6 +187,7 @@ input SearchableProductFilterInput {
   title: SearchableStringFilterInput
   price: SearchableIntFilterInput
   description: SearchableStringFilterInput
+  stock: SearchableIntFilterInput
   and: [SearchableProductFilterInput]
   or: [SearchableProductFilterInput]
   not: SearchableProductFilterInput
@@ -198,6 +203,7 @@ enum SearchableProductSortableFields {
   title
   price
   description
+  stock
 }
 
 input SearchableProductSortInput {

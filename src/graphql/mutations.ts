@@ -7,6 +7,7 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
     title
     price
     description
+    stock
     attributes {
       key
       value
@@ -20,6 +21,7 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
     title
     price
     description
+    stock
     attributes {
       key
       value
@@ -33,6 +35,7 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
     title
     price
     description
+    stock
     attributes {
       key
       value

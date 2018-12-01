@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import "./App.css";
 import { withAuthenticator } from "aws-amplify-react";
 import Amplify, { Auth } from "aws-amplify";
@@ -6,21 +6,39 @@ import Amplify, { Auth } from "aws-amplify";
 import aws_exports from "./aws-exports";
 import { ApolloProvider, Query } from "react-apollo";
 import { appsyncClient } from "./appsyncClient";
-import { ListProductsQuery, ListProductsQueryVariables } from "./API";
-import { listProducts } from "./graphql/queries";
-import gql from "graphql-tag";
+import { ListProductsQuery, OnStockSubscription } from "./API";
 import Async from "react-promise";
 import { notEmpty } from "./ts-utils";
+import { listProductsQuery, stockSubscription } from "./App.gql";
 
 (Async as any).defaultPending = () => "Loading...";
 
 Amplify.configure(aws_exports);
 
-class ProductListQuery extends Query<
-  ListProductsQuery,
-  ListProductsQueryVariables
-> {}
+class ProductListQuery extends Query<ListProductsQuery, {}> {}
 
+type NotEmptyArray<T> = T extends Array<infer T2>
+  ? Array<NonNullable<T2>>
+  : never;
+
+interface ProductListProps {
+  products: NotEmptyArray<
+    NonNullable<ListProductsQuery["listProducts"]>["items"]
+  >;
+
+  subscriptionEffect: () => () => void
+}
+
+const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
+  useEffect(subscriptionEffect);
+  return (
+    <ul>
+      {products.map(({ title, id, stock }) => (
+        <li key={id}>{title} ({stock} left)</li>
+      ))}
+    </ul>
+  );
+};
 class App extends Component {
   render() {
     return (
@@ -32,29 +50,60 @@ class App extends Component {
           return (
             <>
               <p>Signed in as {username}</p>
-            <ApolloProvider client={appsyncClient}>
-              <ProductListQuery query={gql(listProducts)}>
-                {({ data, loading, error }) => {
-                  if (error) {
-                    return `Error: ${error}`;
-                  }
-                  if (loading) {
-                    return "Loading data...";
-                  }
-                  if (data && data.listProducts && data.listProducts.items) {
-                    return (
-                      <ul>
-                        {data.listProducts.items
-                          .filter(notEmpty)
-                          .map(({ title, id }) => (
-                            <li key={id}>{title}</li>
-                          ))}
-                      </ul>
-                    );
-                  }
-                }}
-              </ProductListQuery>
-            </ApolloProvider>
+              <ApolloProvider client={appsyncClient}>
+                <ProductListQuery query={listProductsQuery}>
+                  {({ data, loading, error, subscribeToMore }) => {
+                    if (error) {
+                      return `Error: ${error}`;
+                    }
+                    if (loading) {
+                      return "Loading data...";
+                    }
+                    if (data && data.listProducts && data.listProducts.items) {
+                      console.log({
+                        data,
+                        subscribeToMore,
+                      })
+                      return (
+                        <ProductList
+                          subscriptionEffect={() =>
+                            subscribeToMore({
+                              document: stockSubscription,
+                              updateQuery: (prev, { subscriptionData }) => {
+                                const subscriptionREsult = subscriptionData.data as any as OnStockSubscription | null;
+                                if(!prev.listProducts || !subscriptionREsult || !subscriptionREsult.onUpdateProduct) {
+                                  return prev;
+                                }
+                                const newStockId = subscriptionREsult.onUpdateProduct.id;
+                                const { listProducts, listProducts: { items }} = prev;
+                                if(!items) {
+                                  return prev;
+                                }
+                                return {
+                                  ...prev,
+                                  listProducts: {
+                                    ...listProducts,
+                                    items: items.map((product) => {
+                                      if(!product) {
+                                        return product;
+                                      }
+                                      return {
+                                        ...product,
+                                          ...product.id === newStockId && subscriptionREsult.onUpdateProduct
+                                      }
+                                    })
+                                  }
+                                };
+                              }
+                            })
+                          }
+                          products={data.listProducts.items.filter(notEmpty)}
+                        />
+                      );
+                    }
+                  }}
+                </ProductListQuery>
+              </ApolloProvider>
             </>
           );
         }}

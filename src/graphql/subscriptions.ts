@@ -7,6 +7,7 @@ export const onCreateProduct = `subscription OnCreateProduct {
     title
     price
     description
+    stock
     attributes {
       key
       value
@@ -20,6 +21,7 @@ export const onUpdateProduct = `subscription OnUpdateProduct {
     title
     price
     description
+    stock
     attributes {
       key
       value
@@ -33,6 +35,7 @@ export const onDeleteProduct = `subscription OnDeleteProduct {
     title
     price
     description
+    stock
     attributes {
       key
       value

@@ -13,5 +13,6 @@ type Product @model @searchable @auth(rules: [{
   title: String!
   price: Int!
   description: String!
+  stock: Int!
   attributes: [Attribute!]!
 }

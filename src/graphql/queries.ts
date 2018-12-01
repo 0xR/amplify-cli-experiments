@@ -7,6 +7,7 @@ export const getProduct = `query GetProduct($id: ID!) {
     title
     price
     description
+    stock
     attributes {
       key
       value
@@ -25,6 +26,7 @@ export const listProducts = `query ListProducts(
       title
       price
       description
+      stock
       attributes {
         key
         value
@@ -51,6 +53,7 @@ export const searchProducts = `query SearchProducts(
       title
       price
       description
+      stock
       attributes {
         key
         value
