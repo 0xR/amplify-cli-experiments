@@ -1,0 +1,20 @@
+{
+    "hosting": {
+        "S3AndCloudFront": {
+            "service": "S3AndCloudFront",
+            "providerPlugin": "awscloudformation"
+        }
+    },
+    "auth": {
+        "cognito283350e3": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation"
+        }
+    },
+    "api": {
+        "amplifyexperiments": {
+            "service": "AppSync",
+            "providerPlugin": "awscloudformation"
+        }
+    }
+}
