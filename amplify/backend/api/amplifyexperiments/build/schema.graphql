@@ -1,14 +1,19 @@
-type Category {
-  id: ID!
-  name: String!
-  products(filter: ModelProductFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProductConnection
+type Attribute {
+  key: String!
+  value: String!
 }
 
 type Product {
   id: ID!
   title: String!
+  price: Int!
   description: String!
-  category: Category
+  attributes: [Attribute!]!
+}
+
+input AttributeInput {
+  key: String!
+  value: String!
 }
 
 enum ModelSortDirection {
@@ -16,8 +21,8 @@ enum ModelSortDirection {
   DESC
 }
 
-type ModelCategoryConnection {
-  items: [Category]
+type ModelProductConnection {
+  items: [Product]
   nextToken: String
 }
 
@@ -76,81 +81,131 @@ input ModelBooleanFilterInput {
   eq: Boolean
 }
 
-input ModelCategoryFilterInput {
-  id: ModelIDFilterInput
-  name: ModelStringFilterInput
-  and: [ModelCategoryFilterInput]
-  or: [ModelCategoryFilterInput]
-  not: ModelCategoryFilterInput
-}
-
-type Query {
-  getCategory(id: ID!): Category
-  listCategorys(filter: ModelCategoryFilterInput, limit: Int, nextToken: String): ModelCategoryConnection
-  getProduct(id: ID!): Product
-  listProducts(filter: ModelProductFilterInput, limit: Int, nextToken: String): ModelProductConnection
-}
-
-input CreateCategoryInput {
-  id: ID
-  name: String!
-}
-
-input UpdateCategoryInput {
-  id: ID!
-  name: String
-}
-
-input DeleteCategoryInput {
-  id: ID
-}
-
-type Mutation {
-  createCategory(input: CreateCategoryInput!): Category
-  updateCategory(input: UpdateCategoryInput!): Category
-  deleteCategory(input: DeleteCategoryInput!): Category
-  createProduct(input: CreateProductInput!): Product
-  updateProduct(input: UpdateProductInput!): Product
-  deleteProduct(input: DeleteProductInput!): Product
-}
-
-type Subscription {
-  onCreateCategory: Category @aws_subscribe(mutations: ["createCategory"])
-  onUpdateCategory: Category @aws_subscribe(mutations: ["updateCategory"])
-  onDeleteCategory: Category @aws_subscribe(mutations: ["deleteCategory"])
-  onCreateProduct: Product @aws_subscribe(mutations: ["createProduct"])
-  onUpdateProduct: Product @aws_subscribe(mutations: ["updateProduct"])
-  onDeleteProduct: Product @aws_subscribe(mutations: ["deleteProduct"])
-}
-
-type ModelProductConnection {
-  items: [Product]
-  nextToken: String
-}
-
 input ModelProductFilterInput {
   id: ModelIDFilterInput
   title: ModelStringFilterInput
+  price: ModelIntFilterInput
   description: ModelStringFilterInput
   and: [ModelProductFilterInput]
   or: [ModelProductFilterInput]
   not: ModelProductFilterInput
 }
 
+type Query {
+  getProduct(id: ID!): Product
+  listProducts(filter: ModelProductFilterInput, limit: Int, nextToken: String): ModelProductConnection
+  searchProducts(filter: SearchableProductFilterInput, sort: SearchableProductSortInput, limit: Int, nextToken: Int): SearchableProductConnection
+}
+
 input CreateProductInput {
   id: ID
   title: String!
+  price: Int!
   description: String!
-  productCategoryId: ID
+  attributes: [AttributeInput!]!
 }
 
 input UpdateProductInput {
   id: ID!
   title: String
+  price: Int
   description: String
-  productCategoryId: ID
+  attributes: [AttributeInput!]
 }
 
 input DeleteProductInput {
   id: ID
+}
+
+type Mutation {
+  createProduct(input: CreateProductInput!): Product
+  updateProduct(input: UpdateProductInput!): Product
+  deleteProduct(input: DeleteProductInput!): Product
+}
+
+type Subscription {
+  onCreateProduct: Product @aws_subscribe(mutations: ["createProduct"])
+  onUpdateProduct: Product @aws_subscribe(mutations: ["updateProduct"])
+  onDeleteProduct: Product @aws_subscribe(mutations: ["deleteProduct"])
+}
+
+input SearchableStringFilterInput {
+  ne: String
+  eq: String
+  match: String
+  matchPhrase: String
+  matchPhrasePrefix: String
+  multiMatch: String
+  exists: Boolean
+  wildcard: String
+  regexp: String
+}
+
+input SearchableIDFilterInput {
+  ne: ID
+  eq: ID
+  match: ID
+  matchPhrase: ID
+  matchPhrasePrefix: ID
+  multiMatch: ID
+  exists: Boolean
+  wildcard: ID
+  regexp: ID
+}
+
+input SearchableIntFilterInput {
+  ne: Int
+  gt: Int
+  lt: Int
+  gte: Int
+  lte: Int
+  eq: Int
+  range: [Int]
+}
+
+input SearchableFloatFilterInput {
+  ne: Float
+  gt: Float
+  lt: Float
+  gte: Float
+  lte: Float
+  eq: Float
+  range: [Float]
+}
+
+input SearchableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input SearchableProductFilterInput {
+  id: SearchableIDFilterInput
+  title: SearchableStringFilterInput
+  price: SearchableIntFilterInput
+  description: SearchableStringFilterInput
+  and: [SearchableProductFilterInput]
+  or: [SearchableProductFilterInput]
+  not: SearchableProductFilterInput
+}
+
+enum SearchableSortDirection {
+  asc
+  desc
+}
+
+enum SearchableProductSortableFields {
+  id
+  title
+  price
+  description
+}
+
+input SearchableProductSortInput {
+  field: SearchableProductSortableFields
+  direction: SearchableSortDirection
+}
+
+type SearchableProductConnection {
+  items: [Product]
+  nextToken: String
 }

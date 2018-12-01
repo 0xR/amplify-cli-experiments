@@ -1,11 +1,17 @@
-type Category @model {
-  id: ID!
-  name: String!
-  products: [Product] @connection(name: "CategoryProductsConnection")
+type Attribute {
+  key: String!
+  value: String!
 }
-type Product @model {
+
+type Product @model @searchable @auth(rules: [{
+  allow: groups,
+  groups: ["editor"],
+  mutations: [create, update, delete]
+  queries: []
+}]) {
   id: ID!
   title: String!
+  price: Int!
   description: String!
-  category: Category @connection(name: "CategoryProductsConnection")
+  attributes: [Attribute!]!
 }

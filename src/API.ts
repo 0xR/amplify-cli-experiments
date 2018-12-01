@@ -1,44 +1,39 @@
 /* tslint:disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateCategoryInput = {
-  id?: string | null,
-  name: string,
-};
-
-export type UpdateCategoryInput = {
-  id: string,
-  name?: string | null,
-};
-
-export type DeleteCategoryInput = {
-  id?: string | null,
-};
-
 export type CreateProductInput = {
   id?: string | null,
   title: string,
+  price: number,
   description: string,
-  productCategoryId?: string | null,
+  attributes: Array< AttributeInput >,
+};
+
+export type AttributeInput = {
+  key: string,
+  value: string,
 };
 
 export type UpdateProductInput = {
   id: string,
   title?: string | null,
+  price?: number | null,
   description?: string | null,
-  productCategoryId?: string | null,
+  attributes?: Array< AttributeInput > | null,
 };
 
 export type DeleteProductInput = {
   id?: string | null,
 };
 
-export type ModelCategoryFilterInput = {
+export type ModelProductFilterInput = {
   id?: ModelIDFilterInput | null,
-  name?: ModelStringFilterInput | null,
-  and?: Array< ModelCategoryFilterInput | null > | null,
-  or?: Array< ModelCategoryFilterInput | null > | null,
-  not?: ModelCategoryFilterInput | null,
+  title?: ModelStringFilterInput | null,
+  price?: ModelIntFilterInput | null,
+  description?: ModelStringFilterInput | null,
+  and?: Array< ModelProductFilterInput | null > | null,
+  or?: Array< ModelProductFilterInput | null > | null,
+  not?: ModelProductFilterInput | null,
 };
 
 export type ModelIDFilterInput = {
@@ -67,80 +62,80 @@ export type ModelStringFilterInput = {
   beginsWith?: string | null,
 };
 
-export type ModelProductFilterInput = {
-  id?: ModelIDFilterInput | null,
-  title?: ModelStringFilterInput | null,
-  description?: ModelStringFilterInput | null,
-  and?: Array< ModelProductFilterInput | null > | null,
-  or?: Array< ModelProductFilterInput | null > | null,
-  not?: ModelProductFilterInput | null,
+export type ModelIntFilterInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  contains?: number | null,
+  notContains?: number | null,
+  between?: Array< number | null > | null,
 };
 
-export type CreateCategoryMutationVariables = {
-  input: CreateCategoryInput,
+export type SearchableProductFilterInput = {
+  id?: SearchableIDFilterInput | null,
+  title?: SearchableStringFilterInput | null,
+  price?: SearchableIntFilterInput | null,
+  description?: SearchableStringFilterInput | null,
+  and?: Array< SearchableProductFilterInput | null > | null,
+  or?: Array< SearchableProductFilterInput | null > | null,
+  not?: SearchableProductFilterInput | null,
 };
 
-export type CreateCategoryMutation = {
-  createCategory:  {
-    __typename: "Category",
-    id: string,
-    name: string,
-    products:  {
-      __typename: "ModelProductConnection",
-      items:  Array< {
-        __typename: "Product",
-        id: string,
-        title: string,
-        description: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
+export type SearchableIDFilterInput = {
+  ne?: string | null,
+  eq?: string | null,
+  match?: string | null,
+  matchPhrase?: string | null,
+  matchPhrasePrefix?: string | null,
+  multiMatch?: string | null,
+  exists?: boolean | null,
+  wildcard?: string | null,
+  regexp?: string | null,
 };
 
-export type UpdateCategoryMutationVariables = {
-  input: UpdateCategoryInput,
+export type SearchableStringFilterInput = {
+  ne?: string | null,
+  eq?: string | null,
+  match?: string | null,
+  matchPhrase?: string | null,
+  matchPhrasePrefix?: string | null,
+  multiMatch?: string | null,
+  exists?: boolean | null,
+  wildcard?: string | null,
+  regexp?: string | null,
 };
 
-export type UpdateCategoryMutation = {
-  updateCategory:  {
-    __typename: "Category",
-    id: string,
-    name: string,
-    products:  {
-      __typename: "ModelProductConnection",
-      items:  Array< {
-        __typename: "Product",
-        id: string,
-        title: string,
-        description: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
+export type SearchableIntFilterInput = {
+  ne?: number | null,
+  gt?: number | null,
+  lt?: number | null,
+  gte?: number | null,
+  lte?: number | null,
+  eq?: number | null,
+  range?: Array< number | null > | null,
 };
 
-export type DeleteCategoryMutationVariables = {
-  input: DeleteCategoryInput,
+export type SearchableProductSortInput = {
+  field?: SearchableProductSortableFields | null,
+  direction?: SearchableSortDirection | null,
 };
 
-export type DeleteCategoryMutation = {
-  deleteCategory:  {
-    __typename: "Category",
-    id: string,
-    name: string,
-    products:  {
-      __typename: "ModelProductConnection",
-      items:  Array< {
-        __typename: "Product",
-        id: string,
-        title: string,
-        description: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
-};
+export enum SearchableProductSortableFields {
+  id = "id",
+  title = "title",
+  price = "price",
+  description = "description",
+}
+
+
+export enum SearchableSortDirection {
+  asc = "asc",
+  desc = "desc",
+}
+
 
 export type CreateProductMutationVariables = {
   input: CreateProductInput,
@@ -151,12 +146,13 @@ export type CreateProductMutation = {
     __typename: "Product",
     id: string,
     title: string,
+    price: number,
     description: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: string,
-    } | null,
+    attributes:  Array< {
+      __typename: "Attribute",
+      key: string,
+      value: string,
+    } >,
   } | null,
 };
 
@@ -169,12 +165,13 @@ export type UpdateProductMutation = {
     __typename: "Product",
     id: string,
     title: string,
+    price: number,
     description: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: string,
-    } | null,
+    attributes:  Array< {
+      __typename: "Attribute",
+      key: string,
+      value: string,
+    } >,
   } | null,
 };
 
@@ -187,62 +184,13 @@ export type DeleteProductMutation = {
     __typename: "Product",
     id: string,
     title: string,
+    price: number,
     description: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: string,
-    } | null,
-  } | null,
-};
-
-export type GetCategoryQueryVariables = {
-  id: string,
-};
-
-export type GetCategoryQuery = {
-  getCategory:  {
-    __typename: "Category",
-    id: string,
-    name: string,
-    products:  {
-      __typename: "ModelProductConnection",
-      items:  Array< {
-        __typename: "Product",
-        id: string,
-        title: string,
-        description: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
-};
-
-export type ListCategorysQueryVariables = {
-  filter?: ModelCategoryFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListCategorysQuery = {
-  listCategorys:  {
-    __typename: "ModelCategoryConnection",
-    items:  Array< {
-      __typename: "Category",
-      id: string,
-      name: string,
-      products:  {
-        __typename: "ModelProductConnection",
-        items:  Array< {
-          __typename: "Product",
-          id: string,
-          title: string,
-          description: string,
-        } | null > | null,
-        nextToken: string | null,
-      } | null,
-    } | null > | null,
-    nextToken: string | null,
+    attributes:  Array< {
+      __typename: "Attribute",
+      key: string,
+      value: string,
+    } >,
   } | null,
 };
 
@@ -255,12 +203,13 @@ export type GetProductQuery = {
     __typename: "Product",
     id: string,
     title: string,
+    price: number,
     description: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: string,
-    } | null,
+    attributes:  Array< {
+      __typename: "Attribute",
+      key: string,
+      value: string,
+    } >,
   } | null,
 };
 
@@ -277,68 +226,41 @@ export type ListProductsQuery = {
       __typename: "Product",
       id: string,
       title: string,
+      price: number,
       description: string,
-      category:  {
-        __typename: "Category",
-        id: string,
-        name: string,
-      } | null,
+      attributes:  Array< {
+        __typename: "Attribute",
+        key: string,
+        value: string,
+      } >,
     } | null > | null,
     nextToken: string | null,
   } | null,
 };
 
-export type OnCreateCategorySubscription = {
-  onCreateCategory:  {
-    __typename: "Category",
-    id: string,
-    name: string,
-    products:  {
-      __typename: "ModelProductConnection",
-      items:  Array< {
-        __typename: "Product",
-        id: string,
-        title: string,
-        description: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
+export type SearchProductsQueryVariables = {
+  filter?: SearchableProductFilterInput | null,
+  sort?: SearchableProductSortInput | null,
+  limit?: number | null,
+  nextToken?: number | null,
 };
 
-export type OnUpdateCategorySubscription = {
-  onUpdateCategory:  {
-    __typename: "Category",
-    id: string,
-    name: string,
-    products:  {
-      __typename: "ModelProductConnection",
-      items:  Array< {
-        __typename: "Product",
-        id: string,
-        title: string,
-        description: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-  } | null,
-};
-
-export type OnDeleteCategorySubscription = {
-  onDeleteCategory:  {
-    __typename: "Category",
-    id: string,
-    name: string,
-    products:  {
-      __typename: "ModelProductConnection",
-      items:  Array< {
-        __typename: "Product",
-        id: string,
-        title: string,
-        description: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
+export type SearchProductsQuery = {
+  searchProducts:  {
+    __typename: "SearchableProductConnection",
+    items:  Array< {
+      __typename: "Product",
+      id: string,
+      title: string,
+      price: number,
+      description: string,
+      attributes:  Array< {
+        __typename: "Attribute",
+        key: string,
+        value: string,
+      } >,
+    } | null > | null,
+    nextToken: string | null,
   } | null,
 };
 
@@ -347,12 +269,13 @@ export type OnCreateProductSubscription = {
     __typename: "Product",
     id: string,
     title: string,
+    price: number,
     description: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: string,
-    } | null,
+    attributes:  Array< {
+      __typename: "Attribute",
+      key: string,
+      value: string,
+    } >,
   } | null,
 };
 
@@ -361,12 +284,13 @@ export type OnUpdateProductSubscription = {
     __typename: "Product",
     id: string,
     title: string,
+    price: number,
     description: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: string,
-    } | null,
+    attributes:  Array< {
+      __typename: "Attribute",
+      key: string,
+      value: string,
+    } >,
   } | null,
 };
 
@@ -375,11 +299,12 @@ export type OnDeleteProductSubscription = {
     __typename: "Product",
     id: string,
     title: string,
+    price: number,
     description: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: string,
-    } | null,
+    attributes:  Array< {
+      __typename: "Attribute",
+      key: string,
+      value: string,
+    } >,
   } | null,
 };
