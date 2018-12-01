@@ -10,6 +10,10 @@ import { ListProductsQuery, OnStockSubscription } from "./API";
 import Async from "react-promise";
 import { notEmpty } from "./ts-utils";
 import { listProductsQuery, stockSubscription } from "./App.gql";
+import { Router, Switch, Route, Redirect, Link } from "react-router-dom";
+import createBrowserHistory from "history/createBrowserHistory";
+
+const history = createBrowserHistory();
 
 (Async as any).defaultPending = () => "Loading...";
 
@@ -29,6 +33,15 @@ interface ProductListProps {
   subscriptionEffect: () => () => void
 }
 
+const LoginPage2 = () => <Redirect to="/products"/>;
+
+const LoginPage1 = withAuthenticator(LoginPage2);
+
+const LoginPage = () => <Async
+  promise={Auth.signOut()}
+  then={() => <LoginPage1/>}
+/>;
+
 const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
   useEffect(subscriptionEffect);
   return (
@@ -39,7 +52,8 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
     </ul>
   );
 };
-class App extends Component {
+
+class ProductListPage extends Component {
   render() {
     return (
       <Async
@@ -49,7 +63,7 @@ class App extends Component {
         then={({ username }) => {
           return (
             <>
-              <p>Signed in as {username}</p>
+              <p>Signed in as {username} <Link to="/login">change user</Link></p>
               <ApolloProvider client={appsyncClient}>
                 <ProductListQuery query={listProductsQuery}>
                   {({ data, loading, error, subscribeToMore }) => {
@@ -60,10 +74,6 @@ class App extends Component {
                       return "Loading data...";
                     }
                     if (data && data.listProducts && data.listProducts.items) {
-                      console.log({
-                        data,
-                        subscribeToMore,
-                      })
                       return (
                         <ProductList
                           subscriptionEffect={() =>
@@ -111,5 +121,13 @@ class App extends Component {
     );
   }
 }
+
+const App = () => <Router history={history}>
+  <Switch>
+    <Route path="/products"><ProductListPage/></Route>
+    <Route path="/login"><LoginPage/></Route>
+    <Route><Redirect to="/products"/></Route>
+  </Switch>
+  </Router>
 
 export default App;
