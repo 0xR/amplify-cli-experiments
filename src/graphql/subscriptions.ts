@@ -43,3 +43,102 @@ export const onDeleteProduct = `subscription OnDeleteProduct {
   }
 }
 `;
+export const onCreateCategory = `subscription OnCreateCategory {
+  onCreateCategory {
+    id
+    name
+    childCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+    parentCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const onUpdateCategory = `subscription OnUpdateCategory {
+  onUpdateCategory {
+    id
+    name
+    childCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+    parentCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const onDeleteCategory = `subscription OnDeleteCategory {
+  onDeleteCategory {
+    id
+    name
+    childCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+    parentCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const onCreateCategoryRelation = `subscription OnCreateCategoryRelation {
+  onCreateCategoryRelation {
+    id
+    child {
+      id
+      name
+    }
+    parent {
+      id
+      name
+    }
+  }
+}
+`;
+export const onUpdateCategoryRelation = `subscription OnUpdateCategoryRelation {
+  onUpdateCategoryRelation {
+    id
+    child {
+      id
+      name
+    }
+    parent {
+      id
+      name
+    }
+  }
+}
+`;
+export const onDeleteCategoryRelation = `subscription OnDeleteCategoryRelation {
+  onDeleteCategoryRelation {
+    id
+    child {
+      id
+      name
+    }
+    parent {
+      id
+      name
+    }
+  }
+}
+`;

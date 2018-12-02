@@ -43,3 +43,102 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
   }
 }
 `;
+export const createCategory = `mutation CreateCategory($input: CreateCategoryInput!) {
+  createCategory(input: $input) {
+    id
+    name
+    childCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+    parentCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const updateCategory = `mutation UpdateCategory($input: UpdateCategoryInput!) {
+  updateCategory(input: $input) {
+    id
+    name
+    childCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+    parentCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const deleteCategory = `mutation DeleteCategory($input: DeleteCategoryInput!) {
+  deleteCategory(input: $input) {
+    id
+    name
+    childCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+    parentCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const createCategoryRelation = `mutation CreateCategoryRelation($input: CreateCategoryRelationInput!) {
+  createCategoryRelation(input: $input) {
+    id
+    child {
+      id
+      name
+    }
+    parent {
+      id
+      name
+    }
+  }
+}
+`;
+export const updateCategoryRelation = `mutation UpdateCategoryRelation($input: UpdateCategoryRelationInput!) {
+  updateCategoryRelation(input: $input) {
+    id
+    child {
+      id
+      name
+    }
+    parent {
+      id
+      name
+    }
+  }
+}
+`;
+export const deleteCategoryRelation = `mutation DeleteCategoryRelation($input: DeleteCategoryRelationInput!) {
+  deleteCategoryRelation(input: $input) {
+    id
+    child {
+      id
+      name
+    }
+    parent {
+      id
+      name
+    }
+  }
+}
+`;

@@ -12,6 +12,19 @@ type Product {
   attributes: [Attribute!]!
 }
 
+type Category {
+  id: ID!
+  name: String!
+  childCategories(filter: ModelCategoryRelationFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCategoryRelationConnection
+  parentCategories(filter: ModelCategoryRelationFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCategoryRelationConnection
+}
+
+type CategoryRelation {
+  id: ID!
+  parent: Category!
+  child: Category!
+}
+
 input AttributeInput {
   key: String!
   value: String!
@@ -96,6 +109,8 @@ input ModelProductFilterInput {
 type Query {
   getProduct(id: ID!): Product
   listProducts(filter: ModelProductFilterInput, limit: Int, nextToken: String): ModelProductConnection
+  getCategory(id: ID!): Category
+  listCategorys(filter: ModelCategoryFilterInput, limit: Int, nextToken: String): ModelCategoryConnection
   searchProducts(filter: SearchableProductFilterInput, sort: SearchableProductSortInput, limit: Int, nextToken: Int): SearchableProductConnection
 }
 
@@ -125,12 +140,79 @@ type Mutation {
   createProduct(input: CreateProductInput!): Product
   updateProduct(input: UpdateProductInput!): Product
   deleteProduct(input: DeleteProductInput!): Product
+  createCategory(input: CreateCategoryInput!): Category
+  updateCategory(input: UpdateCategoryInput!): Category
+  deleteCategory(input: DeleteCategoryInput!): Category
+  createCategoryRelation(input: CreateCategoryRelationInput!): CategoryRelation
+  updateCategoryRelation(input: UpdateCategoryRelationInput!): CategoryRelation
+  deleteCategoryRelation(input: DeleteCategoryRelationInput!): CategoryRelation
 }
 
 type Subscription {
   onCreateProduct: Product @aws_subscribe(mutations: ["createProduct"])
   onUpdateProduct: Product @aws_subscribe(mutations: ["updateProduct"])
   onDeleteProduct: Product @aws_subscribe(mutations: ["deleteProduct"])
+  onCreateCategory: Category @aws_subscribe(mutations: ["createCategory"])
+  onUpdateCategory: Category @aws_subscribe(mutations: ["updateCategory"])
+  onDeleteCategory: Category @aws_subscribe(mutations: ["deleteCategory"])
+  onCreateCategoryRelation: CategoryRelation @aws_subscribe(mutations: ["createCategoryRelation"])
+  onUpdateCategoryRelation: CategoryRelation @aws_subscribe(mutations: ["updateCategoryRelation"])
+  onDeleteCategoryRelation: CategoryRelation @aws_subscribe(mutations: ["deleteCategoryRelation"])
+}
+
+type ModelCategoryConnection {
+  items: [Category]
+  nextToken: String
+}
+
+input ModelCategoryFilterInput {
+  id: ModelIDFilterInput
+  name: ModelStringFilterInput
+  and: [ModelCategoryFilterInput]
+  or: [ModelCategoryFilterInput]
+  not: ModelCategoryFilterInput
+}
+
+input CreateCategoryInput {
+  id: ID
+  name: String!
+}
+
+input UpdateCategoryInput {
+  id: ID!
+  name: String
+}
+
+input DeleteCategoryInput {
+  id: ID
+}
+
+input CreateCategoryRelationInput {
+  id: ID
+  categoryRelationParentId: ID!
+  categoryRelationChildId: ID!
+}
+
+input UpdateCategoryRelationInput {
+  id: ID!
+  categoryRelationParentId: ID
+  categoryRelationChildId: ID
+}
+
+input DeleteCategoryRelationInput {
+  id: ID
+}
+
+type ModelCategoryRelationConnection {
+  items: [CategoryRelation]
+  nextToken: String
+}
+
+input ModelCategoryRelationFilterInput {
+  id: ModelIDFilterInput
+  and: [ModelCategoryRelationFilterInput]
+  or: [ModelCategoryRelationFilterInput]
+  not: ModelCategoryRelationFilterInput
 }
 
 input SearchableStringFilterInput {

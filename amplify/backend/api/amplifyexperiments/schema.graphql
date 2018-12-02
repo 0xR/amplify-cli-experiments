@@ -16,3 +16,17 @@ type Product @model @searchable @auth(rules: [{
   stock: Int!
   attributes: [Attribute!]!
 }
+
+type Category @model {
+    id: ID!
+    name: String!
+    childCategories: [CategoryRelation!]! @connection(name: "CategoryChildren")
+    parentCategories: [CategoryRelation!]! @connection(name: "CategoryParents")
+}
+
+type CategoryRelation @model(queries: null) {
+    id: ID!
+    parent: Category! @connection(name: "CategoryChildren")
+    child: Category! @connection(name: "CategoryParents")
+}
+

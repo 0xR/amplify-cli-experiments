@@ -36,6 +36,51 @@ export const listProducts = `query ListProducts(
   }
 }
 `;
+export const getCategory = `query GetCategory($id: ID!) {
+  getCategory(id: $id) {
+    id
+    name
+    childCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+    parentCategories {
+      items {
+        id
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const listCategorys = `query ListCategorys(
+  $filter: ModelCategoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      childCategories {
+        items {
+          id
+        }
+        nextToken
+      }
+      parentCategories {
+        items {
+          id
+        }
+        nextToken
+      }
+    }
+    nextToken
+  }
+}
+`;
 export const searchProducts = `query SearchProducts(
   $filter: SearchableProductFilterInput
   $sort: SearchableProductSortInput
