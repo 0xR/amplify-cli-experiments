@@ -20,3 +20,16 @@ export type OnStockSubscription = {
     stock: number,
   } | null,
 };
+
+export type UpdateStockMutationVariables = {
+  id: string,
+  stock: number,
+};
+
+export type UpdateStockMutation = {
+  updateProduct:  {
+    __typename: "Product",
+    id: string,
+    stock: number,
+  } | null,
+};

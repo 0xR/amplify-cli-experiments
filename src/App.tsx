@@ -6,12 +6,18 @@ import Amplify, { Auth, Cache } from 'aws-amplify';
 import aws_exports from './aws-exports';
 import { ApolloProvider, Query } from 'react-apollo';
 import { appsyncClient } from './appsyncClient';
-import { ListProductsQuery, OnStockSubscription } from './API';
+import {
+  ListProductsQuery,
+  OnStockSubscription,
+  UpdateStockMutation,
+  UpdateStockMutationVariables
+} from './API';
 import Async from 'react-promise';
 import { notEmpty } from './ts-utils';
-import { listProductsQuery, stockSubscription } from './App.gql';
+import { listProductsQuery, stockSubscription, updateStock } from './App.gql';
 import { Router, Switch, Route, Redirect, Link } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
+import Mutation from 'react-apollo/Mutation';
 
 const history = createBrowserHistory();
 
@@ -19,7 +25,11 @@ const history = createBrowserHistory();
 
 Amplify.configure(aws_exports);
 
-class ProductListQuery extends Query<ListProductsQuery, {}> {}
+class ListProducts extends Query<ListProductsQuery, {}> {}
+class UpdateStock extends Mutation<
+  UpdateStockMutation,
+  UpdateStockMutationVariables
+> {}
 
 type NotEmptyArray<T> = T extends Array<infer T2>
   ? Array<NonNullable<T2>>
@@ -62,13 +72,37 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
   useEffect(subscriptionEffect);
   const isEditor = useIsEditor();
   return (
-    <ul>
-      {products.map(({ title, id, stock }) => (
-        <li key={id}>
-          {title} ({stock} left) {isEditor && 'editor'}
-        </li>
-      ))}
-    </ul>
+    <UpdateStock mutation={updateStock}>
+      {updateStock => {
+        return (
+          <ul>
+            {products.map(({ title, id, stock }) => (
+              <li key={id}>
+                {title} ({stock} left){' '}
+                {isEditor && (
+                  <>
+                  <button
+                    onClick={() =>
+                      updateStock({ variables: { id, stock: stock + 1 } })
+                    }
+                  >
+                    +
+                  </button>
+                  <button
+                  onClick={() =>
+                  updateStock({ variables: { id, stock: stock - 1 } })
+                }
+                  >
+                  -
+                  </button>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        );
+      }}
+    </UpdateStock>
   );
 };
 
@@ -89,7 +123,7 @@ class ProductListPage extends Component {
                 Signed in as {username} <Link to="/login">change user</Link>
               </p>
               <ApolloProvider client={appsyncClient}>
-                <ProductListQuery query={listProductsQuery}>
+                <ListProducts query={listProductsQuery}>
                   {({ data, loading, error, subscribeToMore }) => {
                     if (error) {
                       return `Error: ${error}`;
@@ -145,7 +179,7 @@ class ProductListPage extends Component {
                       );
                     }
                   }}
-                </ProductListQuery>
+                </ListProducts>
               </ApolloProvider>
             </>
           );

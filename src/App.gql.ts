@@ -21,3 +21,15 @@ export const stockSubscription = gql`
     }
 `;
 
+
+export const updateStock = gql`
+mutation UpdateStock($id: ID!, $stock: Int!){
+  updateProduct(input:{
+    id: $id
+    stock: $stock
+  }) {
+    id
+    stock
+  }
+}
+`;
