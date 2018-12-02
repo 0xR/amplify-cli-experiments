@@ -33,3 +33,19 @@ export type UpdateStockMutation = {
     stock: number,
   } | null,
 };
+
+export type SearchProductPrefixQueryVariables = {
+  prefix: string,
+};
+
+export type SearchProductPrefixQuery = {
+  searchProducts:  {
+    __typename: "SearchableProductConnection",
+    items:  Array< {
+      __typename: "Product",
+      id: string,
+      title: string,
+      stock: number,
+    } | null > | null,
+  } | null,
+};
