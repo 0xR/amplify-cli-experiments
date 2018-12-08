@@ -167,10 +167,46 @@
 					},
 					"ElasticSearchStreamingLambdaCodeS3Key": "amplify-appsync-files/python_streaming_function.zip",
 					"ElasticSearchStreamingLambdaCodeS3Bucket": "amplifyexperiments-20181201110103-deployment",
-					"schemaGraphql": "s3://amplifyexperiments-20181201110103-deployment/amplify-appsync-files/schema.graphql.1543775793538",
+					"schemaGraphql": "s3://amplifyexperiments-20181201110103-deployment/amplify-appsync-files/schema.graphql.1544263005842",
 					"ResolverBucket": "amplifyexperiments-20181201110103-deployment",
 					"ResolverRootKey": "amplify-appsync-files",
-					"DeploymentTimestamp": "1543775793538",
+					"DeploymentTimestamp": "1544263005842",
+					"env": "dev"
+				}
+			}
+		},
+		"apiwebhook": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplifyexperiments-20181201110103-deployment/amplify-cfn-templates/api/webhook-cloudformation-template.json",
+				"Parameters": {
+					"authRoleName": {
+						"Ref": "AuthRoleName"
+					},
+					"unauthRoleName": {
+						"Ref": "UnauthRoleName"
+					},
+					"functionwebhooklambdaName": {
+						"Fn::GetAtt": [
+							"functionwebhooklambda",
+							"Outputs.Name"
+						]
+					},
+					"functionwebhooklambdaArn": {
+						"Fn::GetAtt": [
+							"functionwebhooklambda",
+							"Outputs.Arn"
+						]
+					},
+					"env": "dev"
+				}
+			}
+		},
+		"functionwebhooklambda": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplifyexperiments-20181201110103-deployment/amplify-cfn-templates/function/webhooklambda-cloudformation-template.json",
+				"Parameters": {
 					"env": "dev"
 				}
 			}
