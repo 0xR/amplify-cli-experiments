@@ -103,11 +103,11 @@ export const onDeleteCategory = `subscription OnDeleteCategory {
 export const onCreateCategoryRelation = `subscription OnCreateCategoryRelation {
   onCreateCategoryRelation {
     id
-    child {
+    parent {
       id
       name
     }
-    parent {
+    child {
       id
       name
     }
@@ -117,11 +117,11 @@ export const onCreateCategoryRelation = `subscription OnCreateCategoryRelation {
 export const onUpdateCategoryRelation = `subscription OnUpdateCategoryRelation {
   onUpdateCategoryRelation {
     id
-    child {
+    parent {
       id
       name
     }
-    parent {
+    child {
       id
       name
     }
@@ -131,11 +131,11 @@ export const onUpdateCategoryRelation = `subscription OnUpdateCategoryRelation {
 export const onDeleteCategoryRelation = `subscription OnDeleteCategoryRelation {
   onDeleteCategoryRelation {
     id
-    child {
+    parent {
       id
       name
     }
-    parent {
+    child {
       id
       name
     }

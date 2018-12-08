@@ -103,11 +103,11 @@ export const deleteCategory = `mutation DeleteCategory($input: DeleteCategoryInp
 export const createCategoryRelation = `mutation CreateCategoryRelation($input: CreateCategoryRelationInput!) {
   createCategoryRelation(input: $input) {
     id
-    child {
+    parent {
       id
       name
     }
-    parent {
+    child {
       id
       name
     }
@@ -117,11 +117,11 @@ export const createCategoryRelation = `mutation CreateCategoryRelation($input: C
 export const updateCategoryRelation = `mutation UpdateCategoryRelation($input: UpdateCategoryRelationInput!) {
   updateCategoryRelation(input: $input) {
     id
-    child {
+    parent {
       id
       name
     }
-    parent {
+    child {
       id
       name
     }
@@ -131,11 +131,11 @@ export const updateCategoryRelation = `mutation UpdateCategoryRelation($input: U
 export const deleteCategoryRelation = `mutation DeleteCategoryRelation($input: DeleteCategoryRelationInput!) {
   deleteCategoryRelation(input: $input) {
     id
-    child {
+    parent {
       id
       name
     }
-    parent {
+    child {
       id
       name
     }
