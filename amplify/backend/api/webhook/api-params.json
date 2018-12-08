@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/webhook",
+            "lambdaFunction": "webhooklambda",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "webhook",
+    "apiName": "webhook",
+    "functionArns": [
+        {
+            "lambdaFunction": "webhooklambda"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplifyexperiments-20181201110103-authRole",
+        "unAuthRoleName": "amplifyexperiments-20181201110103-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "webhooklambda",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
