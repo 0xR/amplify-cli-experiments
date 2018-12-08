@@ -102,8 +102,8 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
   useEffect(subscriptionEffect);
   const isEditor = useIsEditor();
   return (
-    <UpdateStock mutation={updateStock}>
-      {updateStock => {
+    <UpdateProduct mutation={updateProduct}>
+      {updateProduct => {
         return (
           <ul>
             {products.map(({ title, id, stock, image }) => (
@@ -113,18 +113,26 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
                   <>
                     <button
                       onClick={() =>
-                        updateStock({ variables: { id, stock: stock + 1 } })
+                        updateProduct({ variables: { updateProductInput: { id, stock: stock + 1  }} })
                       }
                     >
                       +
                     </button>
                     <button
                       onClick={() =>
-                        updateStock({ variables: { id, stock: stock - 1 } })
+                        updateProduct({ variables: { updateProductInput: { id, stock: stock - 1  }} })
                       }
                     >
                       -
                     </button>
+                    <br/>
+                    {image && <><button
+                      onClick={() =>
+                        updateProduct({ variables: { updateProductInput: { id, image: null  }} })
+                      }
+                    >
+                      remove image
+                    </button>{' '}</>}
                     <Link to={`/upload-image/${id}`}>edit image</Link>
                   </>
                 )}
@@ -136,7 +144,7 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
           </ul>
         );
       }}
-    </UpdateStock>
+    </UpdateProduct>
   );
 };
 
