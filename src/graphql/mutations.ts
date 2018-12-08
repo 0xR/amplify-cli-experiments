@@ -12,6 +12,11 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
       key
       value
     }
+    image {
+      bucket
+      key
+      region
+    }
   }
 }
 `;
@@ -26,6 +31,11 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
       key
       value
     }
+    image {
+      bucket
+      key
+      region
+    }
   }
 }
 `;
@@ -39,6 +49,11 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
     attributes {
       key
       value
+    }
+    image {
+      bucket
+      key
+      region
     }
   }
 }

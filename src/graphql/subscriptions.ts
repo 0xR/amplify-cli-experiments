@@ -12,6 +12,11 @@ export const onCreateProduct = `subscription OnCreateProduct {
       key
       value
     }
+    image {
+      bucket
+      key
+      region
+    }
   }
 }
 `;
@@ -26,6 +31,11 @@ export const onUpdateProduct = `subscription OnUpdateProduct {
       key
       value
     }
+    image {
+      bucket
+      key
+      region
+    }
   }
 }
 `;
@@ -39,6 +49,11 @@ export const onDeleteProduct = `subscription OnDeleteProduct {
     attributes {
       key
       value
+    }
+    image {
+      bucket
+      key
+      region
     }
   }
 }

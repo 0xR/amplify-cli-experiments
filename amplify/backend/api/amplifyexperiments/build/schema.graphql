@@ -10,6 +10,13 @@ type Product {
   description: String!
   stock: Int!
   attributes: [Attribute!]!
+  image: S3Object
+}
+
+type S3Object {
+  bucket: String!
+  key: String!
+  region: String!
 }
 
 type Category {
@@ -28,6 +35,12 @@ type CategoryRelation {
 input AttributeInput {
   key: String!
   value: String!
+}
+
+input S3ObjectInput {
+  bucket: String!
+  key: String!
+  region: String!
 }
 
 enum ModelSortDirection {
@@ -121,6 +134,7 @@ input CreateProductInput {
   description: String!
   stock: Int!
   attributes: [AttributeInput!]!
+  image: S3ObjectInput
 }
 
 input UpdateProductInput {
@@ -130,6 +144,7 @@ input UpdateProductInput {
   description: String
   stock: Int
   attributes: [AttributeInput!]
+  image: S3ObjectInput
 }
 
 input DeleteProductInput {

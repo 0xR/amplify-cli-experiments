@@ -9,5 +9,6 @@ export const appsyncClient = new AWSAppSyncClient({
   auth: {
     type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
     jwtToken: async () => (await Auth.currentSession()).getIdToken().getJwtToken()
-  }
+  },
+  complexObjectsCredentials: () => Auth.currentCredentials() as any,
 });

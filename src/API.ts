@@ -1,16 +1,25 @@
 /* tslint:disable */
 //  This file was automatically generated and should not be edited.
 
-export type ListProductsQuery = {
-  listProducts:  {
-    __typename: "ModelProductConnection",
-    items:  Array< {
-      __typename: "Product",
-      id: string,
-      title: string,
-      stock: number,
-    } | null > | null,
-  } | null,
+export type UpdateProductInput = {
+  id: string,
+  title?: string | null,
+  price?: number | null,
+  description?: string | null,
+  stock?: number | null,
+  attributes?: Array< AttributeInput > | null,
+  image?: S3ObjectInput | null,
+};
+
+export type AttributeInput = {
+  key: string,
+  value: string,
+};
+
+export type S3ObjectInput = {
+  bucket: string,
+  key: string,
+  region: string,
 };
 
 export type OnStockSubscription = {
@@ -46,6 +55,44 @@ export type SearchProductPrefixQuery = {
       id: string,
       title: string,
       stock: number,
+      image:  {
+        __typename: "S3Object",
+        region: string,
+        bucket: string,
+        key: string,
+      } | null,
     } | null > | null,
+  } | null,
+};
+
+export type UpdateProductMutationVariables = {
+  updateProductInput: UpdateProductInput,
+};
+
+export type UpdateProductMutation = {
+  updateProduct:  {
+    __typename: "Product",
+    id: string,
+    title: string,
+    stock: number,
+    image:  {
+      __typename: "S3Object",
+      region: string,
+      bucket: string,
+      key: string,
+    } | null,
+  } | null,
+};
+
+export type ProductListDataFragment = {
+  __typename: "Product",
+  id: string,
+  title: string,
+  stock: number,
+  image:  {
+    __typename: string,
+    region: string,
+    bucket: string,
+    key: string,
   } | null,
 };

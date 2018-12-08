@@ -1,17 +1,5 @@
 import gql from 'graphql-tag';
 
-export const listProductsQuery = gql`
-  query ListProducts {
-    listProducts {
-      items {
-        id
-        title
-        stock
-      }
-    }
-  }
-`;
-
 export const stockSubscription = gql`
   subscription OnStock {
     onUpdateProduct {
@@ -30,17 +18,40 @@ export const updateStock = gql`
   }
 `;
 
+const productListFragment = gql`
+fragment ProductListData on Product {
+  id
+  title
+  stock
+  image {
+    region
+    bucket
+    key
+  }
+}
+`;
+
 export const searchProductPrefix = gql`
-  query SearchProductPrefix($prefix: String!) {
-    searchProducts(
-      filter: { title: { matchPhrasePrefix: $prefix }, not: { stock: { lte: 0 } } }
-      sort: { field: price, direction: asc }
-    ) {
-      items {
-        id
-        title
-        stock
-      }
+query SearchProductPrefix($prefix: String!) {
+  searchProducts(
+    filter: { title: { matchPhrasePrefix: $prefix }, not: { stock: { lte: 0 } } }
+    sort: { field: price, direction: asc }
+  ) {
+    items {
+      ...ProductListData
     }
   }
+}
+
+${productListFragment}
+`;
+
+export const updateProduct = gql`
+mutation UpdateProduct ($updateProductInput: UpdateProductInput!){
+  updateProduct(input: $updateProductInput) {
+      ...ProductListData
+  }
+}
+
+${productListFragment}
 `;

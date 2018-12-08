@@ -15,6 +15,14 @@ type Product @model @searchable @auth(rules: [{
   description: String!
   stock: Int!
   attributes: [Attribute!]!
+  image: S3Object
+}
+
+
+type S3Object {
+    bucket: String!
+    key: String!
+    region: String!
 }
 
 type Category @model {

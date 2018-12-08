@@ -12,6 +12,11 @@ export const getProduct = `query GetProduct($id: ID!) {
       key
       value
     }
+    image {
+      bucket
+      key
+      region
+    }
   }
 }
 `;
@@ -30,6 +35,11 @@ export const listProducts = `query ListProducts(
       attributes {
         key
         value
+      }
+      image {
+        bucket
+        key
+        region
       }
     }
     nextToken
@@ -102,6 +112,11 @@ export const searchProducts = `query SearchProducts(
       attributes {
         key
         value
+      }
+      image {
+        bucket
+        key
+        region
       }
     }
     nextToken

@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 import './App.css';
-import { withAuthenticator } from 'aws-amplify-react';
+import { withAuthenticator, PhotoPicker, S3Image } from 'aws-amplify-react';
 import Amplify, { Auth } from 'aws-amplify';
 
 import aws_exports from './aws-exports';
@@ -8,15 +8,30 @@ import { ApolloProvider, Query } from 'react-apollo';
 import { appsyncClient } from './appsyncClient';
 import {
   OnStockSubscription,
+  S3ObjectInput,
   SearchProductPrefixQuery,
   SearchProductPrefixQueryVariables,
+  UpdateProductMutation,
+  UpdateProductMutationVariables,
   UpdateStockMutation,
   UpdateStockMutationVariables
 } from './API';
 import Async from 'react-promise';
 import { notEmpty } from './ts-utils';
-import { searchProductPrefix, stockSubscription, updateStock } from './App.gql';
-import { Router, Switch, Route, Redirect, Link } from 'react-router-dom';
+import {
+  searchProductPrefix,
+  stockSubscription,
+  updateProduct,
+  updateStock
+} from './App.gql';
+import {
+  Router,
+  Switch,
+  Route,
+  Redirect,
+  Link,
+  RouteComponentProps
+} from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import Mutation from 'react-apollo/Mutation';
 
@@ -26,13 +41,24 @@ const history = createBrowserHistory();
 
 Amplify.configure(aws_exports);
 
+const {
+  aws_user_files_s3_bucket: s3Bucket,
+  aws_user_files_s3_bucket_region: s3Region
+} = aws_exports;
+
 class SearchProductPrefix extends Query<
   SearchProductPrefixQuery,
   SearchProductPrefixQueryVariables
 > {}
+
 class UpdateStock extends Mutation<
   UpdateStockMutation,
   UpdateStockMutationVariables
+> {}
+
+class UpdateProduct extends Mutation<
+  UpdateProductMutation,
+  UpdateProductMutationVariables
 > {}
 
 type NotEmptyArray<T> = T extends Array<infer T2>
@@ -80,7 +106,7 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
       {updateStock => {
         return (
           <ul>
-            {products.map(({ title, id, stock }) => (
+            {products.map(({ title, id, stock, image }) => (
               <li key={id}>
                 {title} ({stock} left){' '}
                 {isEditor && (
@@ -99,7 +125,11 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
                     >
                       -
                     </button>
+                    <Link to={`/upload-image/${id}`}>edit image</Link>
                   </>
+                )}
+                {image && (
+                  <S3Image imgKey={image.key.replace(/^public\//, '')} />
                 )}
               </li>
             ))}
@@ -111,7 +141,7 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
 };
 
 const ProductListPage1 = ({ username }: { username: string }) => {
-  const [prefix, setPrefix] = useState('');
+  const [prefix, setPrefix] = useState('name');
   return (
     <>
       <p>
@@ -206,31 +236,85 @@ class ProductListPage extends Component {
           Auth.signIn('guest', 'Welcom1!')
         )}
         then={({ username }) => {
-          return (
-            <ApolloProvider client={appsyncClient}>
-              <ProductListPage1 {...{ username }} />
-            </ApolloProvider>
-          );
+          return <ProductListPage1 {...{ username }} />;
         }}
       />
     );
   }
 }
 
+const UploadImagePage = ({
+  match: {
+    params: { productId }
+  }
+}: RouteComponentProps<{ productId: string }>) => {
+  const [file, setFile] = useState<null | File>(null);
+
+  return (
+    <UpdateProduct mutation={updateProduct}>
+      {(updateProduct, { loading, data }) => {
+        return (
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              if (file) {
+                const match = /\.(\w+)$/.exec(file.name);
+                const extension = match ? match[1] : 'unknown';
+
+                return updateProduct({
+                  variables: {
+                    updateProductInput: {
+                      id: productId,
+                      image: {
+                        bucket: s3Bucket,
+                        region: s3Region,
+                        key: `public/productimage-${productId}.${extension}`,
+                        mimeType: file.type,
+                        localUri: file
+                      } as S3ObjectInput
+                    }
+                  }
+                });
+              }
+            }}
+          >
+            <PhotoPicker
+              preview
+              name="imageInput"
+              onPick={({ file }: { file: File }) => setFile(file)}
+            />
+            {loading ? (
+              'updating...'
+            ) : (
+              <button type="submit">update image</button>
+            )}
+            {data && data.updateProduct && data.updateProduct.id && (
+              <Redirect to="/products" />
+            )}
+          </form>
+        );
+      }}
+    </UpdateProduct>
+  );
+};
+
 const App = () => (
-  <Router history={history}>
-    <Switch>
-      <Route path="/products">
-        <ProductListPage />
-      </Route>
-      <Route path="/login">
-        <LoginPage />
-      </Route>
-      <Route>
-        <Redirect to="/products" />
-      </Route>
-    </Switch>
-  </Router>
+  <ApolloProvider client={appsyncClient}>
+    <Router history={history}>
+      <Switch>
+        <Route path="/products">
+          <ProductListPage />
+        </Route>
+        <Route path="/login">
+          <LoginPage />
+        </Route>
+        <Route path="/upload-image/:productId" component={UploadImagePage} />
+        <Route>
+          <Redirect to="/products" />
+        </Route>
+      </Switch>
+    </Router>
+  </ApolloProvider>
 );
 
 export default App;

@@ -1,6 +1,6 @@
 projects:
   amplifyexperiments:
-    schemaPath: amplify/backend/function/webhooklambda/src/src/graphql/schema.json
+    schemaPath: src/graphql/schema.json
     includes:
       - src/**/*gql.ts
     excludes:
