@@ -38,5 +38,11 @@
 			"build": true,
 			"dependsOn": []
 		}
+	},
+	"storage": {
+		"filestorage": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
+		}
 	}
 }

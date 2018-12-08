@@ -1,0 +1,13 @@
+{
+    "bucketName": "filestoragebucket",
+    "authPolicyName": "s3_amplify_3d94380c",
+    "unauthPolicyName": "s3_amplify_3d94380c",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authPermissions": "rw",
+    "unauthPermissions": "r"
+}
