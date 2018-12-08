@@ -9,11 +9,14 @@ See the License for the specific language governing permissions and limitations 
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
+const basicAuth = require('express-basic-auth')
+require('dotenv').config()
 
 // declare a new express app
 var app = express()
 app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
+
 
 // Enable CORS for all methods
 app.use(function(req, res, next) {
@@ -22,64 +25,23 @@ app.use(function(req, res, next) {
   next()
 });
 
+console.log({
 
-/**********************
- * Example get method *
- **********************/
-
-app.get('/webhook', function(req, res) {
-  // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
+    [process.env['WEBHOOK_USER']]: process.env['WEBHOOK_PASSWORD']
 });
 
-app.get('/webhook/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
-});
-
-/****************************
-* Example post method *
-****************************/
+app.use(basicAuth({
+    users: {
+        [process.env['WEBHOOK_USER']]: process.env['WEBHOOK_PASSWORD']
+    }
+}))
 
 app.post('/webhook', function(req, res) {
   // Add your code here
   res.json({success: 'post call succeed!', url: req.url, body: req.body})
 });
 
-app.post('/webhook/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'post call succeed!', url: req.url, body: req.body})
-});
-
-/****************************
-* Example post method *
-****************************/
-
-app.put('/webhook', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
-});
-
-app.put('/webhook/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
-});
-
-/****************************
-* Example delete method *
-****************************/
-
-app.delete('/webhook', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
-});
-
-app.delete('/webhook/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
-});
-
-app.listen(3000, function() {
+app.listen(3001, function() {
     console.log("App started")
 });
 
