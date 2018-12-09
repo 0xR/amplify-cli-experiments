@@ -22,7 +22,6 @@ import {
   searchProductPrefix,
   stockSubscription,
   updateProduct,
-  updateStock
 } from './App.gql';
 import {
   Router,
@@ -34,6 +33,7 @@ import {
 } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import Mutation from 'react-apollo/Mutation';
+import {MockData} from "./MockData";
 
 const history = createBrowserHistory();
 
@@ -315,6 +315,9 @@ const App = () => (
         </Route>
         <Route path="/login">
           <LoginPage />
+        </Route>
+        <Route path="/mockdata">
+          <MockData/>
         </Route>
         <Route path="/upload-image/:productId" component={UploadImagePage} />
         <Route>

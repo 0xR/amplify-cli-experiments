@@ -22,6 +22,16 @@ export type S3ObjectInput = {
   region: string,
 };
 
+export type CreateProductInput = {
+  id?: string | null,
+  title: string,
+  price: number,
+  description: string,
+  stock: number,
+  attributes: Array< AttributeInput >,
+  image?: S3ObjectInput | null,
+};
+
 export type OnStockSubscription = {
   onUpdateProduct:  {
     __typename: "Product",
@@ -80,6 +90,32 @@ export type UpdateProductMutation = {
       region: string,
       bucket: string,
       key: string,
+    } | null,
+  } | null,
+};
+
+export type CreateProductMutationVariables = {
+  input: CreateProductInput,
+};
+
+export type CreateProductMutation = {
+  createProduct:  {
+    __typename: "Product",
+    id: string,
+    title: string,
+    price: number,
+    description: string,
+    stock: number,
+    attributes:  Array< {
+      __typename: "Attribute",
+      key: string,
+      value: string,
+    } >,
+    image:  {
+      __typename: "S3Object",
+      bucket: string,
+      key: string,
+      region: string,
     } | null,
   } | null,
 };
