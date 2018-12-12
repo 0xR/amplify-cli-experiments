@@ -149,7 +149,7 @@ const ProductList = ({ products, subscriptionEffect }: ProductListProps) => {
 };
 
 const ProductListPage1 = ({ username }: { username: string }) => {
-  const [prefix, setPrefix] = useState('name');
+  const [prefix, setPrefix] = useState('computer');
   return (
     <>
       <p>
