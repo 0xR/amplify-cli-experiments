@@ -25,11 +25,6 @@ app.use(function(req, res, next) {
   next()
 });
 
-console.log({
-
-    [process.env['WEBHOOK_USER']]: process.env['WEBHOOK_PASSWORD']
-});
-
 app.use(basicAuth({
     users: {
         [process.env['WEBHOOK_USER']]: process.env['WEBHOOK_PASSWORD']
